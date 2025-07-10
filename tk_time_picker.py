@@ -93,6 +93,46 @@ class TimePicker(tk.Frame):
         self.tk_seconds.set(f'{self.seconds:02d}')
 
 
+@dataclass
+class UnitPicker(tk.Frame):
+    master: tk.Widget
+    maxi: int = 59
+    increment: int = 1
+    increment2: int = 5
+    
+    def __post_init__(self):
+        super().__init__(self.master)
+        
+        self.value = 0
+        self.tk_value = tk.StringVar(value='00')
+        
+        self.option_add('*Label*font', ['', 12])
+        self._up = ImageTk.PhotoImage(Image.open("up.png"), (20, 10))
+        self._up2 = ImageTk.PhotoImage(Image.open("up2.png"), (20, 10))
+        self._down = ImageTk.PhotoImage(Image.open("down.png"), (20, 10))
+        self._down2 = ImageTk.PhotoImage(Image.open("down2.png"), (20, 10))
+        
+        tk.Button(self, image=self._up2, command=lambda: self.on_button(self.increment2)).grid(row=0, column=0)
+        tk.Button(self, image=self._up, command=lambda: self.on_button(self.increment)).grid(row=0, column=1)
+        
+        tk.Label(self, textvariable=self.tk_value).grid(row=1, column=0, columnspan=2)
+        
+        tk.Button(self, image=self._down2, command=lambda: self.on_button(-self.increment2)).grid(row=2, column=0)
+        tk.Button(self, image=self._down, command=lambda: self.on_button(-self.increment)).grid(row=2, column=1)
+    
+    def on_button(self, amount):
+        new_value = self.value + amount
+        
+        if new_value < 0:
+            self.value = self.maxi + new_value + 1
+        elif new_value > self.maxi:
+            self.value = new_value - self.maxi - 1
+        else:
+            self.value = new_value
+        
+        self.tk_value.set(f'{self.value:02d}')
+
+
 if __name__ == '__main__':
     root = tk.Tk()
     root.title('TimePicker testing')
@@ -100,4 +140,6 @@ if __name__ == '__main__':
     root.configure(bg='grey')
     TimePicker(root).pack()
     TimePicker(root, 99).pack()
+    UnitPicker(root).pack()
+    UnitPicker(root, maxi=23, increment2=3).pack()
     root.mainloop()
