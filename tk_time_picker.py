@@ -25,9 +25,12 @@ class TimePicker(tk.Frame):
         self._seconds.pack(side='left')
         
         self._minutes.bind('<<OnWrapDown>>', lambda event: self._hours.add(-1))
-        self._seconds.bind('<<OnWrapDown>>', lambda event: self._minutes.add(-1))
         self._minutes.bind('<<OnWrapUp>>', lambda event: self._hours.add(1))
+        self._seconds.bind('<<OnWrapDown>>', lambda event: self._minutes.add(-1))
         self._seconds.bind('<<OnWrapUp>>', lambda event: self._minutes.add(1))
+    
+    def __str__(self):
+        return f'{self._hours}:{self._minutes}:{self._seconds}'
 
 
 @dataclass
@@ -43,19 +46,19 @@ class UnitPicker(tk.Frame):
         self.value = 0
         self.tk_value = tk.StringVar(value='00')
         
-        self.option_add('*Label*font', ['', 12])
-        self._up = ImageTk.PhotoImage(Image.open("up.png"), (20, 10))
-        self._up2 = ImageTk.PhotoImage(Image.open("up2.png"), (20, 10))
-        self._down = ImageTk.PhotoImage(Image.open("down.png"), (20, 10))
-        self._down2 = ImageTk.PhotoImage(Image.open("down2.png"), (20, 10))
+        label = tk.Label(self, textvariable=self.tk_value, font=['', 12])
+        label.grid(row=1, column=0, columnspan=2)
         
-        tk.Button(self, image=self._up2, command=lambda: self.add(self.increment2)).grid(row=0, column=0)
-        tk.Button(self, image=self._up, command=lambda: self.add(self.increment)).grid(row=0, column=1)
-        
-        tk.Label(self, textvariable=self.tk_value).grid(row=1, column=0, columnspan=2)
-        
-        tk.Button(self, image=self._down2, command=lambda: self.add(-self.increment2)).grid(row=2, column=0)
-        tk.Button(self, image=self._down, command=lambda: self.add(-self.increment)).grid(row=2, column=1)
+        self.imgs = list(map(lambda src: ImageTk.PhotoImage(Image.open(src)), 
+                             ['up2.png', 'up.png', 'down2.png', 'down.png']))
+        self._add_button(self.imgs[0], self.increment2, row=0, column=0)
+        self._add_button(self.imgs[1], self.increment, row=0, column=1)
+        self._add_button(self.imgs[2], -self.increment2, row=2, column=0)
+        self._add_button(self.imgs[3], -self.increment, row=2, column=1)
+    
+    def _add_button(self, img, increment, row, column):
+        button = tk.Button(self, image=img, command=lambda: self.add(increment))
+        button.grid(row=row, column=column)
     
     def add(self, amount):
         new_value = self.value + amount
@@ -70,6 +73,9 @@ class UnitPicker(tk.Frame):
             self.value = new_value
         
         self.tk_value.set(f'{self.value:02d}')
+    
+    def __str__(self):
+        return self.tk_value.get()
 
 
 if __name__ == '__main__':
