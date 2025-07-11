@@ -1,6 +1,13 @@
 import tkinter as tk
 from dataclasses import dataclass
-from PIL import Image, ImageTk
+from PIL import Image
+from PIL.ImageTk import PhotoImage
+import pathlib
+
+
+script_location = pathlib.Path(__file__).parent
+images_names = ['up2.png', 'up.png', 'down2.png', 'down.png']
+images_paths = list(map(lambda n: f'{script_location}/{n}', images_names))
 
 
 @dataclass
@@ -54,13 +61,11 @@ class UnitPicker(tk.Frame):
         label.pack()
         bottom.pack()
         
-        self.imgs = list(map(lambda src: ImageTk.PhotoImage(Image.open(src)), 
-                             ['up2.png', 'up.png', 'down2.png', 'down.png']))
         self.buttons = []
-        self._add_button(self.imgs[0], self.increment2, top)
-        self._add_button(self.imgs[1], self.increment, top, 1)
-        self._add_button(self.imgs[2], -self.increment2, bottom)
-        self._add_button(self.imgs[3], -self.increment, bottom, 1)
+        self._add_button(images_paths[0], self.increment2, top)
+        self._add_button(images_paths[1], self.increment, top, 1)
+        self._add_button(images_paths[2], -self.increment2, bottom)
+        self._add_button(images_paths[3], -self.increment, bottom, 1)
         
         for widget in [self, top, bottom, label]:
             widget.bind('<Enter>', self.show_buttons)
@@ -76,8 +81,11 @@ class UnitPicker(tk.Frame):
         for button in self.buttons:
             button.grid_remove()
     
-    def _add_button(self, img, increment, parent, column=0):
-        button = tk.Button(parent, image=img, command=lambda: self.add(increment))
+    def _add_button(self, image_path, increment, parent, column=0):
+        image = PhotoImage(Image.open(image_path))
+        button = tk.Button(parent, image=image, command=lambda: self.add(increment))
+        # keep a reference to prevent PIL from garbage collecting the image
+        button._ref_image = image
         button.grid(row=0, column=column)
         button.after(100, button.grid_remove)
         self.buttons.append(button)
