@@ -39,26 +39,48 @@ class UnitPicker(tk.Frame):
     maxi: int = 59
     increment: int = 1
     increment2: int = 5
+    value: int = 0
     
     def __post_init__(self):
         super().__init__(self.master)
         
-        self.value = 0
         self.tk_value = tk.StringVar(value='00')
         
+        top = tk.Frame(self)
+        bottom = tk.Frame(self)
         label = tk.Label(self, textvariable=self.tk_value, font=['', 12])
-        label.grid(row=1, column=0, columnspan=2)
+        
+        top.pack()
+        label.pack()
+        bottom.pack()
         
         self.imgs = list(map(lambda src: ImageTk.PhotoImage(Image.open(src)), 
                              ['up2.png', 'up.png', 'down2.png', 'down.png']))
-        self._add_button(self.imgs[0], self.increment2, row=0, column=0)
-        self._add_button(self.imgs[1], self.increment, row=0, column=1)
-        self._add_button(self.imgs[2], -self.increment2, row=2, column=0)
-        self._add_button(self.imgs[3], -self.increment, row=2, column=1)
+        self.buttons = []
+        self._add_button(self.imgs[0], self.increment2, top)
+        self._add_button(self.imgs[1], self.increment, top, 1)
+        self._add_button(self.imgs[2], -self.increment2, bottom)
+        self._add_button(self.imgs[3], -self.increment, bottom, 1)
+        
+        for widget in [self, top, bottom, label]:
+            widget.bind('<Enter>', self.show_buttons)
+            widget.bind('<FocusIn>', self.show_buttons)
+            widget.bind('<Leave>', self.hide_buttons)
+            widget.bind('<FocusOut>', self.hide_buttons)
     
-    def _add_button(self, img, increment, row, column):
-        button = tk.Button(self, image=img, command=lambda: self.add(increment))
-        button.grid(row=row, column=column)
+    def show_buttons(self, event):
+        for button in self.buttons:
+            button.grid()
+    
+    def hide_buttons(self, event):
+        for button in self.buttons:
+            button.grid_remove()
+    
+    def _add_button(self, img, increment, parent, column=0):
+        button = tk.Button(parent, image=img, command=lambda: self.add(increment))
+        button.grid(row=0, column=column)
+        button.after(100, button.grid_remove)
+        self.buttons.append(button)
     
     def add(self, amount):
         new_value = self.value + amount
