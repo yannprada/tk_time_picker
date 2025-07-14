@@ -38,6 +38,12 @@ class TimePicker(tk.Frame):
     
     def __str__(self):
         return f'{self._hours}:{self._minutes}:{self._seconds}'
+    
+    def set_value(self, value):
+        value = value.split(':')
+        self._hours.set_value(value[0])
+        self._minutes.set_value(value[1])
+        self._seconds.set_value(value[2])
 
 
 @dataclass
@@ -102,10 +108,17 @@ class UnitPicker(tk.Frame):
         else:
             self.value = new_value
         
+        self._update()
+    
+    def _update(self):
         self.tk_value.set(f'{self.value:02d}')
     
     def __str__(self):
         return self.tk_value.get()
+    
+    def set_value(self, value):
+        self.value = int(value)
+        self._update()
 
 
 if __name__ == '__main__':
