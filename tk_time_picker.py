@@ -7,7 +7,7 @@ import pathlib
 
 script_location = pathlib.Path(__file__).parent
 images_names = ['up2.png', 'up.png', 'down2.png', 'down.png']
-images_paths = list(map(lambda n: f'{script_location}/{n}', images_names))
+images_paths = list(map(lambda n: script_location / n, images_names))
 
 
 @dataclass
