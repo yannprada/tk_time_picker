@@ -53,6 +53,7 @@ class UnitPicker(tk.Frame):
     increment: int = 1
     increment2: int = 5
     value: int = 0
+    _job_hide_buttons: bool = None
     
     def __post_init__(self):
         super().__init__(self.master)
@@ -76,14 +77,18 @@ class UnitPicker(tk.Frame):
         for widget in [self, top, bottom, label]:
             widget.bind('<Enter>', self.show_buttons)
             widget.bind('<FocusIn>', self.show_buttons)
-            widget.bind('<Leave>', self.hide_buttons)
-            widget.bind('<FocusOut>', self.hide_buttons)
+            widget.bind('<Button-1>', self.show_buttons)
     
     def show_buttons(self, event):
         for button in self.buttons:
             button.grid()
+        
+        if self._job_hide_buttons is not None:
+            self.after_cancel(self._job_hide_buttons)
+        
+        self._job_hide_buttons = self.after(1000, self.hide_buttons)
     
-    def hide_buttons(self, event):
+    def hide_buttons(self):
         for button in self.buttons:
             button.grid_remove()
     
