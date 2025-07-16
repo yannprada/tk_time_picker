@@ -1,5 +1,6 @@
 import tkinter as tk
 from dataclasses import dataclass
+from datetime import datetime
 from PIL import Image
 from PIL.ImageTk import PhotoImage
 import pathlib
@@ -38,6 +39,10 @@ class TimePicker(tk.Frame):
     
     def __str__(self):
         return f'{self._hours}:{self._minutes}:{self._seconds}'
+    
+    def get_timedelta(self):
+        return datetime.timedelta(hours=self._hours.value, minutes=self._minutes.value, 
+                                  seconds=self._seconds.value)
     
     def set_value(self, value):
         value = value.split(':')
