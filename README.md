@@ -10,7 +10,11 @@ TimePicker.get_seconds()			# -> int: hours * 3600 + minutes * 60 + seconds
 TimePicker.set_value(value: str)	# value format: 'HH:MM:SS'
 ```
 
+## Demo
+
 ```python
+import tkinter as tk
+
 root = tk.Tk()
 root.title('TimePicker testing')
 root.geometry('300x300+1000+200')
