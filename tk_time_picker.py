@@ -137,6 +137,4 @@ if __name__ == '__main__':
     root.configure(bg='grey')
     TimePicker(root).pack()
     TimePicker(root, 99).pack()
-    # UnitPicker(root).pack()
-    # UnitPicker(root, maxi=23, increment2=3).pack()
     root.mainloop()
