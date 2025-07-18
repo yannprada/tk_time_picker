@@ -136,5 +136,5 @@ if __name__ == '__main__':
     root.geometry('300x300+1000+200')
     root.configure(bg='grey')
     TimePicker(root).pack()
-    TimePicker(root, 99).pack()
+    TimePicker(root, hours_limit=99).pack()
     root.mainloop()
