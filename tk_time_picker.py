@@ -2,24 +2,22 @@ import tkinter as tk
 from dataclasses import dataclass
 
 
+# TODO: TimePicker should be a button
+
 @dataclass
-class TimePicker(tk.Frame):
+class TimePicker(tk.Button):
     master: tk.Widget
     hours_limit: float = 23
+    hours: int = 0
+    minutes: int = 0
+    seconds: int = 0
     
     def __post_init__(self):
         super().__init__(self.master)
-
-        self.hours = 0
-        self.minutes = 0
-        self.seconds = 0
         self.display_value = tk.StringVar(value='00:00:00')
-
-        edit_button = tk.Button(self, textvariable=self.display_value, 
-                                command=self.on_edit_button)
-        edit_button.pack(side='right')
+        self.configure(textvariable=self.display_value, command=self.on_press)
     
-    def on_edit_button(self):
+    def on_press(self):
         dialog = TimePickerDialog(self, self.hours_limit, self.hours, self.minutes, 
                                   self.seconds)
         self.wait_window(dialog.root)
