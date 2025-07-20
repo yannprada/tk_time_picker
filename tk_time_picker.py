@@ -1,14 +1,5 @@
 import tkinter as tk
 from dataclasses import dataclass
-from datetime import datetime
-from PIL import Image
-from PIL.ImageTk import PhotoImage
-import pathlib
-
-
-script_location = pathlib.Path(__file__).parent
-images_names = ['up2.png', 'up.png', 'down2.png', 'down.png']
-images_paths = list(map(lambda n: script_location / n, images_names))
 
 
 @dataclass
@@ -73,10 +64,10 @@ class UnitPicker(tk.Frame):
         bottom.pack()
         
         self.buttons = []
-        self._add_button(images_paths[0], self.increment2, top)
-        self._add_button(images_paths[1], self.increment, top, 1)
-        self._add_button(images_paths[2], -self.increment2, bottom)
-        self._add_button(images_paths[3], -self.increment, bottom, 1)
+        self._add_button('🠝🠝', self.increment2, top)
+        self._add_button('🠝', self.increment, top, 1)
+        self._add_button('🠟🠟', -self.increment2, bottom)
+        self._add_button('🠟', -self.increment, bottom, 1)
         
         for widget in [self, top, bottom, label]:
             widget.bind('<Enter>', self.show_buttons)
@@ -90,17 +81,14 @@ class UnitPicker(tk.Frame):
         if self._job_hide_buttons is not None:
             self.after_cancel(self._job_hide_buttons)
         
-        self._job_hide_buttons = self.after(1000, self.hide_buttons)
+        self._job_hide_buttons = self.after(500, self.hide_buttons)
     
     def hide_buttons(self):
         for button in self.buttons:
             button.grid_remove()
     
-    def _add_button(self, image_path, increment, parent, column=0):
-        image = PhotoImage(Image.open(image_path))
-        button = tk.Button(parent, image=image, command=lambda: self.add(increment))
-        # keep a reference to prevent PIL from garbage collecting the image
-        button._ref_image = image
+    def _add_button(self, symbol, increment, parent, column=0):
+        button = tk.Button(parent, text=symbol, command=lambda: self.add(increment))
         button.grid(row=0, column=column)
         button.after(100, button.grid_remove)
         self.buttons.append(button)
