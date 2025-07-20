@@ -45,6 +45,7 @@ class TimePickerDialog:
     hours: int = 0
     minutes: int = 0
     seconds: int = 0
+    font_size: int = 20
 
     def __post_init__(self):
         x = self.master.winfo_pointerx()
@@ -61,15 +62,15 @@ class TimePickerDialog:
         inner = tk.Frame(top)
         inner.pack(pady=20)
 
-        self._hours = UnitPicker(inner, value=self.hours, maxi=self.hours_limit, 
-                                 increment2=3)
-        self._minutes = UnitPicker(inner, value=self.minutes)
-        self._seconds = UnitPicker(inner, value=self.seconds)
+        self._hours = UnitPicker(inner, value=self.hours, font_size=self.font_size, 
+                                 maxi=self.hours_limit, increment2=3)
+        self._minutes = UnitPicker(inner, value=self.minutes, font_size=self.font_size)
+        self._seconds = UnitPicker(inner, value=self.seconds, font_size=self.font_size)
         
         self._hours.pack(side='left')
-        tk.Label(inner, text=':').pack(side='left')
+        tk.Label(inner, text=':', font=['', self.font_size]).pack(side='left')
         self._minutes.pack(side='left')
-        tk.Label(inner, text=':').pack(side='left')
+        tk.Label(inner, text=':', font=['', self.font_size]).pack(side='left')
         self._seconds.pack(side='left')
         
         self._minutes.bind('<<OnWrapDown>>', lambda event: self._hours.add(-1))
@@ -102,6 +103,7 @@ class UnitPicker(tk.Frame):
     increment: int = 1
     increment2: int = 5
     value: int = 0
+    font_size: int = 20
     
     def __post_init__(self):
         super().__init__(self.master)
@@ -110,7 +112,7 @@ class UnitPicker(tk.Frame):
         
         top = tk.Frame(self)
         bottom = tk.Frame(self)
-        label = tk.Label(self, textvariable=self.tk_value, font=['', 20])
+        label = tk.Label(self, textvariable=self.tk_value, font=['', self.font_size])
         
         top.pack()
         label.pack()
