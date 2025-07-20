@@ -2,8 +2,6 @@ import tkinter as tk
 from dataclasses import dataclass
 
 
-# TODO: TimePicker should be a button
-
 @dataclass
 class TimePicker(tk.Button):
     master: tk.Widget
