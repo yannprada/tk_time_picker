@@ -33,7 +33,7 @@ class TimePicker(tk.Frame):
     
     def set_value(self, value):
         self.display_value.set(value)
-        
+
         value = value.split(':')
         self.hours = int(value[0])
         self.minutes = int(value[1])
@@ -49,11 +49,19 @@ class TimePickerDialog:
     seconds: int = 0
 
     def __post_init__(self):
+        x = self.master.winfo_pointerx()
+        y = self.master.winfo_pointery()
+
         self.root = tk.Toplevel(self.master)
+        # place on top of the TimePicker
+        self.root.geometry(f'300x200+{x}+{y}')
         self.root.title('Pick a time')
 
-        inner = tk.Frame(self.root)
-        inner.pack(padx=5, pady=5)
+        top = tk.Frame(self.root)
+        top.pack(fill='both', expand=True)
+
+        inner = tk.Frame(top)
+        inner.pack(pady=20)
 
         self._hours = UnitPicker(inner, value=self.hours, maxi=self.hours_limit, 
                                  increment2=3)
@@ -72,10 +80,12 @@ class TimePickerDialog:
         self._seconds.bind('<<OnWrapUp>>', lambda event: self._minutes.add(1))
 
         bottom = tk.Frame(self.root)
-        bottom.pack()
+        bottom.pack(pady=20)
 
-        tk.Button(bottom, text='Cancel', command=self.root.destroy).pack(side='left')
-        tk.Button(bottom, text='OK', command=self.ok).pack(side='left')
+        cancel = tk.Button(bottom, text='Cancel', command=self.root.destroy, font=['', 12])
+        cancel.pack(side='left')
+        ok = tk.Button(bottom, text='OK', command=self.ok, font=['', 12])
+        ok.pack(side='left')
 
         self.root.grab_set()
 
@@ -102,7 +112,7 @@ class UnitPicker(tk.Frame):
         
         top = tk.Frame(self)
         bottom = tk.Frame(self)
-        label = tk.Label(self, textvariable=self.tk_value, font=['', 12])
+        label = tk.Label(self, textvariable=self.tk_value, font=['', 20])
         
         top.pack()
         label.pack()
