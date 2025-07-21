@@ -10,20 +10,21 @@ root.configure(bg='grey')
 
 TimePicker(root, hours=12, minutes=34, seconds=56).pack()
 
-picker = TimePicker(root, hours_limit=99)
+picker = TimePicker(root, hours_limit=100)
 picker.pack()
-picker.set_value('66:55:44')
+picker.set_value('99:59:59')
 
 print(picker)
 print(picker.get_seconds())
 
-picker.seconds = 100
-print(picker.hours, picker.minutes, picker.seconds)
+# testing wrapping
+picker.seconds += 1
+print(picker)
 
-picker.minutes = 100
-print(picker.hours, picker.minutes, picker.seconds)
+picker.minutes += 60
+print(picker)
 
-picker.hours = 100
-print(picker.hours, picker.minutes, picker.seconds)
+picker.hours -= 2
+print(picker)
 
 root.mainloop()

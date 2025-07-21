@@ -9,7 +9,7 @@ def _get_time_string(obj):
 @dataclass
 class TimePicker(tk.Button):
     master: tk.Widget
-    hours_limit: float = 23
+    hours_limit: float = 24
     hours: int = 0
     minutes: int = 0
     seconds: int = 0
@@ -20,18 +20,15 @@ class TimePicker(tk.Button):
         self.configure(textvariable=self._display_value, command=self.on_press)
     
     def __setattr__(self, name, value):
-        if name in ['hours', 'minutes', 'seconds'] and value < 0:
-            raise ValueError(f'Picker.{name} should be positive')
-
-        if (name == 'seconds') and (value > 59):
+        if (name == 'seconds'):
             self.minutes += value // 60
             value = value % 60
 
-        if (name == 'minutes') and (value > 59):
+        if (name == 'minutes'):
             self.hours += value // 60
             value = value % 60
 
-        if (name == 'hours') and (value > self.hours_limit):
+        if (name == 'hours'):
             value = value % self.hours_limit
 
         super(self.__class__, self).__setattr__(name, value)
@@ -67,7 +64,7 @@ class TimePicker(tk.Button):
 @dataclass
 class TimePickerDialog:
     master: tk.Widget
-    hours_limit: float = 23
+    hours_limit: float = 24
     hours: int = 0
     minutes: int = 0
     seconds: int = 0
@@ -125,7 +122,7 @@ class TimePickerDialog:
 @dataclass
 class UnitPicker(tk.Frame):
     master: tk.Widget
-    maxi: int = 59
+    maxi: int = 60
     increment: int = 1
     increment2: int = 5
     value: int = 0
@@ -161,10 +158,10 @@ class UnitPicker(tk.Frame):
         new_value = self.value + amount
         
         if new_value < 0:
-            self.value = self.maxi + new_value + 1
+            self.value = self.maxi + new_value
             self.event_generate('<<OnWrapDown>>')
-        elif new_value > self.maxi:
-            self.value = new_value - self.maxi - 1
+        elif new_value >= self.maxi:
+            self.value = new_value - self.maxi
             self.event_generate('<<OnWrapUp>>')
         else:
             self.value = new_value
