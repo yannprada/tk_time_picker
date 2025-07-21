@@ -1,5 +1,9 @@
 import tkinter as tk
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+def _get_time_string(obj):
+    return f'{obj.hours:02d}:{obj.minutes:02d}:{obj.seconds:02d}'
 
 
 @dataclass
@@ -12,24 +16,48 @@ class TimePicker(tk.Button):
     
     def __post_init__(self):
         super().__init__(self.master)
-        self.display_value = tk.StringVar(value='00:00:00')
-        self.configure(textvariable=self.display_value, command=self.on_press)
+        self._display_value = tk.StringVar()
+        self.configure(textvariable=self._display_value, command=self.on_press)
     
+    def __setattr__(self, name, value):
+        if name in ['hours', 'minutes', 'seconds'] and value < 0:
+            raise ValueError(f'Picker.{name} should be positive')
+
+        if (name == 'seconds') and (value > 59):
+            self.minutes += value // 60
+            value = value % 60
+
+        if (name == 'minutes') and (value > 59):
+            self.hours += value // 60
+            value = value % 60
+
+        if (name == 'hours') and (value > self.hours_limit):
+            value = value % self.hours_limit
+
+        super(self.__class__, self).__setattr__(name, value)
+        self._update_display()
+
+    def _update_display(self):
+        if hasattr(self, '_display_value'):
+            self._display_value.set(
+                f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}')
+
     def on_press(self):
         dialog = TimePickerDialog(self, self.hours_limit, self.hours, self.minutes, 
                                   self.seconds)
         self.wait_window(dialog.root)
-        self.set_value(f'{dialog.hours:02d}:{dialog.minutes:02d}:{dialog.seconds:02d}')
-    
+        self.hours = dialog.hours
+        self.minutes = dialog.minutes
+        self.seconds = dialog.seconds
+        self._update_display()
+
     def __str__(self):
-        return self.display_value.get()
+        return self._display_value.get()
 
     def get_seconds(self):
-        raise self.hours * 3600 + self.minutes * 60 + self.seconds
+        return self.hours * 3600 + self.minutes * 60 + self.seconds
     
     def set_value(self, value):
-        self.display_value.set(value)
-
         value = value.split(':')
         self.hours = int(value[0])
         self.minutes = int(value[1])
