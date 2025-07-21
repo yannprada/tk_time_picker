@@ -32,4 +32,4 @@ TimePicker(root, hours_limit=99).pack()
 root.mainloop()
 ```
 
-![TimePicker test](https://github.com/yannprada/tk_time_picker/blob/987f5785e7991f41b44a87a61cbf15af99572c24/test.png "TimePicker test")
+![TimePicker test](https://raw.githubusercontent.com/yannprada/tk_time_picker/987f5785e7991f41b44a87a61cbf15af99572c24/test.png?token=GHSAT0AAAAAADF74VLDJ77HK4HTOU7ELLZO2D6BM6A "TimePicker test")
