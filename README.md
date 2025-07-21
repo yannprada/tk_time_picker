@@ -1,13 +1,13 @@
 # TimePicker
 
-tkinter widget
+tkinter widget.
 
-Mouse over the numbers to reveal the buttons.
+Button that displays time in `HH:MM:SS` format. When clicked, opens a window to edit time.
 
 Methods:
 ```python
 TimePicker.__str__()				# -> str: format 'HH:MM:SS'
-TimePicker.get_seconds()			# -> int: hours * 3600 + minutes * 60 + seconds
+TimePicker.get_seconds()			# -> int: total seconds
 TimePicker.set_value(value: str)	# value format: 'HH:MM:SS'
 ```
 
