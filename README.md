@@ -51,4 +51,4 @@ print(picker.get_seconds())	# > 21600
 root.mainloop()
 ```
 
-![TimePicker test](https://raw.githubusercontent.com/yannprada/tk_time_picker/56cfd10d08047f0ba93be9eb2d0788f43e6ea3ed/test.png "TimePicker test")
+![TimePicker test](https://raw.githubusercontent.com/yannprada/tk_time_picker/refs/heads/master/demo.png "TimePicker test")
