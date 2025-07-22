@@ -40,8 +40,8 @@ class TimePicker(tk.Button):
                 f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}')
 
     def on_press(self):
-        dialog = TimePickerDialog(self, self.hours_limit, self.hours, self.minutes, 
-                                  self.seconds)
+        dialog = TimePickerDialog(self, self.hours_limit, self.hours, 
+                                  self.minutes, self.seconds)
         self.wait_window(dialog.root)
         self.hours = dialog.hours
         self.minutes = dialog.minutes
@@ -55,7 +55,17 @@ class TimePicker(tk.Button):
         return self.hours * 3600 + self.minutes * 60 + self.seconds
     
     def set_value(self, value):
-        value = value.split(':')
+        if type(value) not in [str, list, tuple]:
+            raise TypeError(f'TimePicker.set_value accepts a string, list or '
+                            f'tuple, got {type(value)}')
+
+        if type(value) is str:
+            value = value.split(':')
+        
+        if len(value) != 3:
+            raise AttributeError(f'TimePicker.set_value should contain 3 '
+                                 f'values, got {len(value)}')
+        
         self.hours = int(value[0])
         self.minutes = int(value[1])
         self.seconds = int(value[2])
