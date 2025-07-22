@@ -1,10 +1,15 @@
 # TimePicker
 
-tkinter widget.
+A tkinter widget.
 
-Button that displays time in `HH:MM:SS` format. When clicked, opens a window to edit time.
+This is a button that shows time in the format `HH:MM:SS`. When clicked, it opens a dialog window for editing the time value.
 
-Methods:
+## Install
+
+`pip install tk-digital-time-picker`
+
+## Signature
+
 ```python
 TimePicker.__str__()				# -> str: format 'HH:MM:SS'
 TimePicker.get_seconds()			# -> int: total seconds
@@ -52,7 +57,3 @@ root.mainloop()
 ```
 
 ![TimePicker test](https://raw.githubusercontent.com/yannprada/tk_time_picker/refs/heads/master/demo.png "TimePicker test")
-
-## Install
-
-pip install tk-digital-time-picker
