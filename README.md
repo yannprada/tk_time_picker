@@ -52,3 +52,7 @@ root.mainloop()
 ```
 
 ![TimePicker test](https://raw.githubusercontent.com/yannprada/tk_time_picker/refs/heads/master/demo.png "TimePicker test")
+
+## Install
+
+pip install tk-digital-time-picker
